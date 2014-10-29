@@ -1,0 +1,13 @@
+Section: misc
+Priority: optional
+Maintainer: cfmlprojects <cfml@cfmlprojects.org>
+Package: debrepo-keyring
+Priority: optional
+Architecture: all
+Multi-Arch: foreign
+Version:1.0.0
+Depends:
+Recommends: gpgv
+Description: debrepo keys
+ debrepo digitally signs Release files. This package
+ contains the archive keys used for that.

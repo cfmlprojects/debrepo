@@ -1,0 +1,8 @@
+#!/bin/sh
+set -e
+
+if command -v apt-key >/dev/null 2>&1 ; then
+    apt-key add /usr/share/keyrings/debrepo-archive-keyring.gpg
+fi
+
+exit 0

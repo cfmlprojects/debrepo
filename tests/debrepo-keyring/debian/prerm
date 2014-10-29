@@ -1,0 +1,12 @@
+#!/bin/sh
+set -e
+
+case "$1" in
+    remove|purge)
+	if command -v apt-key >/dev/null 2>&1 ; then
+		apt-key del 81C01889
+	fi
+	;;
+esac
+
+exit 0
