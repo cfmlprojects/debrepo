@@ -179,7 +179,8 @@ public class DebRepo {
             IOUtil.fileWrite(releaseFile, release.toString());
 
             // If we should sign the package
-            boolean doSign = secring != null && key != null && passphrase != null;
+            boolean doSign = secring != null && key != null && passphrase != null
+                    && secring.length() > 0 && key.length() > 0 && passphrase.length() > 0;
             if (doSign) {
                 log.info("Signing Release with key: "+ key);
                 if (secring == null || !secring.exists()) {

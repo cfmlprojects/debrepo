@@ -82,6 +82,12 @@
 	   	<echo message="Updating apt (deb) repo in ${deb.repo}"/>
 
 		<taskdef-dependency name="debrepo" classname="debrepo.ant.DebRepoTask" artifactId="debrepo" groupId="org.cfmlprojects" version="${debrepo.version}" />
+		<debrepo debsDir="${deb.dir}" repoDir="${temp.dir}/deleteme" verbose="true" 
+			key="" passphrase="" keyring=""
+			label="Debrepo" description="Debrepo Repo"
+		/>
+
+
 		<debrepo debsDir="${deb.dir}" repoDir="${deb.repo}" verbose="true" 
 			key="${debrepo.sign.key.id}" passphrase="${debrepo.sign.key.passphrase}" keyring="${debrepo.sign.keyring}"
 			label="Debrepo" description="Debrepo Repo"
