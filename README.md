@@ -12,7 +12,7 @@ There is an ant task (debrepo.ant.DebRepoTask) for easy utilization in builds.
 ~/creds/secret.properties
 ```
 debrepo.sign.key.passphrase=inconceivable
-debrepo.sign.key.ide=D0B067EC
+debrepo.sign.key.id=D0B067EC
 debrepo.sign.keyring=${user.home}/creds/debrepo-secring.gpg
 ```
 
