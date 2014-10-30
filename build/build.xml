@@ -45,6 +45,21 @@
 	   	<property name="debrepo.sign.key.passphrase" value="inconceivable" />
 	   	<property name="debrepo.sign.key.id" value="D0B067EC" />
 	   	<property name="debrepo.sign.keyring" location="${tests.dir}/secring.gpg" />
+
+		<taskdef-dependency name="deb" classname="debrepo.ant.DebTask" artifactId="debrepo" groupId="org.cfmlprojects" version="1.0.0" />
+	   	<deb
+	        todir="${deb.dir}"
+	        package="railo-application"
+	        section="web"
+	        depends="java-common"
+            key="${debrepo.sign.key.id}" passphrase="${debrepo.sign.key.passphrase}"
+    		keyring="${debrepo.sign.keyring}">
+	        <version upstream="${debrepo.version}"/>
+	        <maintainer name="Packager Name" email="packager@email.addy"/>
+	        <description synopsis="This is the summary">This is the long description and it can go for several lines and whatnot</description>
+	   		<tarfileset file="${debrepo.jar.file}" prefix="usr/local/bin" filemode="755"/>
+	   	</deb>
+
 	   	<deb-create
 	        todir="${deb.dir}"
 	        package="debrepo"
