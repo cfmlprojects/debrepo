@@ -44,14 +44,16 @@
 		<mkdir dir="${deb.dir}"/>
 	   	<property name="debrepo.sign.key.passphrase" value="inconceivable" />
 	   	<property name="debrepo.sign.key.id" value="D0B067EC" />
-	   	<property name="debrepo.sign.keyring" location="${tests.dir}/secring.gpg" />
+	   	<property name="debrepo.sign.keyring" location="${tests.dir}/resources/secring.gpg" />
 
 		<taskdef-dependency name="deb" classname="debrepo.ant.DebTask" artifactId="debrepo" groupId="org.cfmlprojects" version="1.0.0" />
+		<ant-set-log-level level="3"/>
 	   	<deb
 	        todir="${deb.dir}"
 	        package="railo-application"
 	        section="web"
 	        depends="java-common"
+	        signpackage="true"
             key="${debrepo.sign.key.id}" passphrase="${debrepo.sign.key.passphrase}"
     		keyring="${debrepo.sign.keyring}">
 	        <version upstream="${debrepo.version}"/>
@@ -74,10 +76,10 @@
 	   		<tarfileset file="${debrepo.jar.file}" prefix="usr/local/bin" filemode="755"/>
 	   	</deb-create>
 
-		<jdeb destfile="${deb.dir}/debrepo-keyring_${debrepo.version}-1_all.deb" control="${tests.dir}/debrepo-keyring/debian" verbose="true" 
+		<jdeb destfile="${deb.dir}/debrepo-keyring_${debrepo.version}-1_all.deb" control="${tests.dir}/resources/debrepo-keyring/debian" verbose="true" 
 	        key="${debrepo.sign.key.id}" passphrase="${debrepo.sign.key.passphrase}" keyring="${debrepo.sign.keyring}">
-	   		<tarfileset dir="${tests.dir}/debrepo-keyring/keyrings" prefix="usr/share/keyrings" filemode="644"/>
-	   		<tarfileset file="${tests.dir}/debrepo-keyring/README" prefix="usr/share/doc/debrepo-keyring" filemode="644"/>
+	   		<tarfileset dir="${tests.dir}/resources/debrepo-keyring/keyrings" prefix="usr/share/keyrings" filemode="644"/>
+	   		<tarfileset file="${tests.dir}/resources/debrepo-keyring/README" prefix="usr/share/doc/debrepo-keyring" filemode="644"/>
 	    </jdeb>
 	   	<echo message="Updating apt (deb) repo in ${deb.repo}"/>
 
