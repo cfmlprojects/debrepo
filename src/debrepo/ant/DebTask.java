@@ -608,13 +608,15 @@ public class DebTask extends Task {
             debMaker.setChangesIn(_changesIn);
             debMaker.setChangesOut(_changesOut);
             debMaker.setChangesSave(_changesSave);
-            debMaker.setKeyring(_keyring);
-            debMaker.setKey(_key);
-            debMaker.setPassphrase(_passphrase);
-            debMaker.setSignPackage(doSign);
-            debMaker.setSignMethod(_signmethod);
-            debMaker.setSignRole(_signrole);
             debMaker.setCompression(_compression);
+            if(doSign) {
+                debMaker.setKeyring(_keyring);
+                debMaker.setKey(_key);
+                debMaker.setPassphrase(_passphrase);
+                debMaker.setSignPackage(doSign);
+                debMaker.setSignMethod(_signmethod);
+                debMaker.setSignRole(_signrole);
+            }
 
             try {
                 debMaker.validate();
