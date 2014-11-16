@@ -290,7 +290,7 @@ public class DebTask extends Task {
     private String _compression = "gzip";
     private boolean _verbose;
 
-    private File _tempFolder;
+    private File _controlDirectory;
 
     private String _key;
     private File _keyring;
@@ -298,10 +298,12 @@ public class DebTask extends Task {
     private String _signmethod = "debsig-verify";
     private String _signrole = "origin";
     private Boolean _signpackage;
+    private File _control;
 
     private static final Tar.TarCompressionMethod GZIP_COMPRESSION_METHOD = new Tar.TarCompressionMethod();
     private static final Tar.TarLongFileMode GNU_LONGFILE_MODE = new Tar.TarLongFileMode();
     private final Task task = this;
+
 
 
     static {
@@ -326,6 +328,10 @@ public class DebTask extends Task {
 
     public void setVersion(String version) {
         _version = version;
+    }
+
+    public void setControl(File control) {
+    	_control = control;
     }
 
     public void setVerbose(Boolean verbose) {
@@ -559,13 +565,21 @@ public class DebTask extends Task {
             if (_maintainerObj != null)
                 _maintainer = _maintainerObj.toString();
 
-            _tempFolder = createTempFolder();
 
             String debFileName = _package + "_" + _version + "_" + _architecture + ".deb";
             File debFile = new File(_toDir, debFileName);
-
-            File controlFile = new File(_tempFolder, "control");
-            writeControlFile(controlFile);
+            
+            if(_control == null) {
+            	_controlDirectory = createTempFolder();
+            	File controlFile = new File(_controlDirectory, "control");
+            	writeControlFile(controlFile);            	
+            } else {
+            	_controlDirectory = _control;
+            }
+        	File controlFile = new File(_controlDirectory, "control");
+        	if(!_controlDirectory.exists())
+                throw new BuildException(
+                        "The control directory does not exist:"+_controlDirectory.getCanonicalPath());
 
             log("Writing deb file to: " + debFile.getAbsolutePath());
 
@@ -604,7 +618,7 @@ public class DebTask extends Task {
             }
             DebMaker debMaker = new DebMaker(console, dataProducers, conffilesProducers);
             debMaker.setDeb(debFile);
-            debMaker.setControl(_tempFolder);
+            debMaker.setControl(_controlDirectory);
             debMaker.setChangesIn(_changesIn);
             debMaker.setChangesOut(_changesOut);
             debMaker.setChangesSave(_changesSave);
@@ -630,8 +644,11 @@ public class DebTask extends Task {
             if (_debFilenameProperty.length() > 0)
                 getProject().setProperty(_debFilenameProperty, debFile.getAbsolutePath());
 
-            deleteFileCheck(controlFile);
-            deleteFolderCheck(_tempFolder);
+            if(_control == null) {
+            	deleteFileCheck(controlFile);
+            	deleteFolderCheck(_controlDirectory);
+            }
+            
         } catch (IOException e) {
             throw new BuildException(e);
         }

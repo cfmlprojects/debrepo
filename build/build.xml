@@ -81,7 +81,16 @@
 	   		<tarfileset dir="${tests.dir}/resources/debrepo-keyring/keyrings" prefix="usr/share/keyrings" filemode="644"/>
 	   		<tarfileset file="${tests.dir}/resources/debrepo-keyring/README" prefix="usr/share/doc/debrepo-keyring" filemode="644"/>
 	    </jdeb>
-	   	<echo message="Updating apt (deb) repo in ${deb.repo}"/>
+
+	   	<deb
+	        todir="${deb.dir}"
+	   	    control="${tests.dir}/resources/debrepo-keyring/debian"
+	        signpackage="true"
+            key="${debrepo.sign.key.id}" passphrase="${debrepo.sign.key.passphrase}"
+    		keyring="${debrepo.sign.keyring}"/>
+
+		
+		<echo message="Updating apt (deb) repo in ${deb.repo}"/>
 
 		<taskdef-dependency name="debrepo" classname="debrepo.ant.DebRepoTask" artifactId="debrepo" groupId="org.cfmlprojects" version="${debrepo.version}" />
 		<debrepo debsDir="${deb.dir}" repoDir="${temp.dir}/deleteme" verbose="true" 
