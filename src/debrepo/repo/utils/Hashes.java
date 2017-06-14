@@ -39,7 +39,7 @@ public class Hashes {
     }
 
     public enum Hash {
-        MD5("MD5"), SHA1("SHA-1"), SHA256("SHA-256");
+        SHA256("SHA-256"), MD5("MD5"), SHA1("SHA-1");
 
         private String hString;
 
