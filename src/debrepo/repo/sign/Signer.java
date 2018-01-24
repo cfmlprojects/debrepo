@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.util.Iterator;
 
-import org.vafer.jdeb.shaded.compress.io.LineIterator;
+import org.vafer.jdeb.shaded.commons.io.LineIterator;
 import org.vafer.jdeb.shaded.bc.bcpg.ArmoredOutputStream;
 import org.vafer.jdeb.shaded.bc.bcpg.BCPGOutputStream;
 import org.vafer.jdeb.shaded.bc.openpgp.PGPException;
@@ -23,6 +23,7 @@ import org.vafer.jdeb.shaded.bc.openpgp.PGPUtil;
 import org.vafer.jdeb.shaded.bc.openpgp.operator.bc.BcPBESecretKeyDecryptorBuilder;
 import org.vafer.jdeb.shaded.bc.openpgp.operator.bc.BcPGPContentSignerBuilder;
 import org.vafer.jdeb.shaded.bc.openpgp.operator.bc.BcPGPDigestCalculatorProvider;
+import org.vafer.jdeb.shaded.bc.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.vafer.jdeb.utils.PGPSignatureOutputStream;
 
 public class Signer {
@@ -123,24 +124,18 @@ public class Signer {
      */
     @SuppressWarnings("rawtypes")
     private PGPSecretKey getSecretKey(InputStream input, String keyId) throws IOException, PGPException {
-        PGPSecretKeyRingCollection keyrings = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(input));
-
+        PGPSecretKeyRingCollection keyrings = new PGPSecretKeyRingCollection(PGPUtil.getDecoderStream(input), new JcaKeyFingerprintCalculator());
         Iterator rIt = keyrings.getKeyRings();
-
         while (rIt.hasNext()) {
             PGPSecretKeyRing kRing = (PGPSecretKeyRing) rIt.next();
             Iterator kIt = kRing.getSecretKeys();
-
             while (kIt.hasNext()) {
                 PGPSecretKey key = (PGPSecretKey) kIt.next();
-
-                if (key.isSigningKey()
-                        && String.format("%08x", key.getKeyID() & 0xFFFFFFFFL).equals(keyId.toLowerCase())) {
+                if (key.isSigningKey() && String.format("%08x", key.getKeyID() & 0xFFFFFFFFL).equals(keyId.toLowerCase())) {
                     return key;
                 }
             }
         }
-
         return null;
     }
 

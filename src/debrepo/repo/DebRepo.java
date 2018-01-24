@@ -23,12 +23,12 @@ import debrepo.repo.utils.IOUtil;
 import debrepo.repo.utils.Utils;
 
 import org.vafer.jdeb.shaded.bc.openpgp.PGPException;
-import org.vafer.jdeb.shaded.compress.compress.archivers.ArchiveException;
-import org.vafer.jdeb.shaded.compress.compress.archivers.ArchiveInputStream;
-import org.vafer.jdeb.shaded.compress.compress.archivers.ArchiveStreamFactory;
-import org.vafer.jdeb.shaded.compress.compress.archivers.ar.ArArchiveEntry;
-import org.vafer.jdeb.shaded.compress.compress.archivers.tar.TarArchiveEntry;
-import org.vafer.jdeb.shaded.compress.compress.utils.IOUtils;
+import org.vafer.jdeb.shaded.commons.compress.archivers.ArchiveException;
+import org.vafer.jdeb.shaded.commons.compress.archivers.ArchiveInputStream;
+import org.vafer.jdeb.shaded.commons.compress.archivers.ArchiveStreamFactory;
+import org.vafer.jdeb.shaded.commons.compress.archivers.ar.ArArchiveEntry;
+import org.vafer.jdeb.shaded.commons.compress.archivers.tar.TarArchiveEntry;
+import org.vafer.jdeb.shaded.commons.compress.utils.IOUtils;
 
 /**
  * creates an apt repository.
@@ -167,6 +167,7 @@ public class DebRepo {
             packagesWriter = new BufferedWriter(new OutputStreamWriter(new GZIPOutputStream(new FileOutputStream(
                     packagesFile))));
             packagesWriter.write(packages.toString());
+            packagesWriter.close();
             hashes = Utils.getDefaultDigests(packagesFile);
             pinfo = new ReleaseInfo(PACKAGES_GZ, packagesFile.length(), hashes);
             release.addInfo(pinfo);
